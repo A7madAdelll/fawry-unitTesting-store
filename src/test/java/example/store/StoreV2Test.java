@@ -47,10 +47,31 @@ public class StoreV2Test {
         Exception exception = Assertions.assertThrows(RuntimeException.class,()->{
             store.buy(egg,customer);
         });
-        System.out.println(exception.getMessage());
         // Assert
         Assertions.assertEquals("Payment failure: ",exception.getMessage().substring(0,17));
     }
 
+    @Test
+    void buyShouldBeDoneIfWithDrawSucceedAndQuantityIsBiggerThanZeroInStore(){
+        //arrange
+        AccountManager accountManager = mock(AccountManager.class);
+
+        Customer customer = mock(Customer.class);
+        when(accountManager.withdraw(customer,5)).thenReturn("success");//mock returning error
+
+
+        Product egg = mock(Product.class);
+        when(egg.getQuantity()).thenReturn(100);
+        when(egg.getPrice()).thenReturn(5);
+
+        Store s =new StoreImpl(accountManager);
+
+
+        //act
+        Assertions.assertDoesNotThrow(()->{
+            s.buy(egg,customer);
+        });
+        //assert
+    }
 
 }
