@@ -60,9 +60,10 @@ public class StoreV2Test {
         when(accountManager.withdraw(customer,5)).thenReturn("success");//mock returning error
 
 
-        Product egg = mock(Product.class);
-        when(egg.getQuantity()).thenReturn(100);
-        when(egg.getPrice()).thenReturn(5);
+
+        Product egg = new Product();
+        egg.setQuantity(100);
+        egg.setPrice(5);
 
         Store s =new StoreImpl(accountManager);
 
@@ -72,6 +73,7 @@ public class StoreV2Test {
             s.buy(egg,customer);
         });
         //assert
+        Assertions.assertEquals(99,egg.getQuantity());
     }
 
 }
