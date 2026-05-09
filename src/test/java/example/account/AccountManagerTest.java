@@ -46,11 +46,25 @@ public class AccountManagerTest {
         int overflowwithdrawAmount =1;
         // Act
         String result = am.withdraw(c, overflowwithdrawAmount);
-
-
         // Assert
         Assertions.assertEquals("insufficient account balance", result);
     }
+    @Test
+    void withDrawShouldSucceedIfCustomerIsVip() {
+        // Arrange
+        AccountManager am = new AccountManagerImpl();
+        Customer c = new Customer();
+        c.setBalance(0);
+        c.setCreditAllowed(true);
+        c.setVip(true);
+        int overflowwithdrawAmount =AccountManagerImpl.getMaxCredit()+100000;
+
+        // Act
+        String result = am.withdraw(c, overflowwithdrawAmount);
+        // Assert
+        Assertions.assertEquals("success", result);
+    }
+
 
     @Test
     void givenCustomerDepositingNegativeAmountToBalanceThenFail(){
