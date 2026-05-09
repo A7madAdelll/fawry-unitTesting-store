@@ -9,20 +9,22 @@ import static org.mockito.Mockito.*;
 public class StoreV2Test {
 
     @Test
-    void test() {
+    void buyShouldFailIfQuantityIsZero() {
         // Arrange
         AccountManager accountManager = mock(AccountManager.class);
-        when(accountManager.withdraw(any(), anyInt())).thenReturn("success");
         Store store = new StoreImpl(accountManager);
-        Product product = new Product();
-        product.setQuantity(4);
+        Product egg = new Product();
         Customer customer = new Customer();
+        egg.setQuantity(0);
+
 
         // Act
-        store.buy(product, customer);
+        RuntimeException exception =Assertions.assertThrows(RuntimeException.class,()->{
+            store.buy(egg,customer);
+        });
 
         // Assert
-        Assertions.assertEquals(3, product.getQuantity());
+        Assertions.assertEquals("Product out of stock", exception.getMessage());
     }
 
 }
