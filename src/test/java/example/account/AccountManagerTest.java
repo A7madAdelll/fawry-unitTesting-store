@@ -35,6 +35,22 @@ public class AccountManagerTest {
         // Assert
         Assertions.assertEquals("maximum credit exceeded", result);
     }
+    @Test
+    void withDrawShouldFailIfCustomerIsnotisCreditAllowedAndNotVip() {
+        // Arrange
+        AccountManager am = new AccountManagerImpl();
+        Customer c = new Customer();
+        c.setBalance(0);
+        c.setCreditAllowed(false);
+        c.setVip(false);
+        int overflowwithdrawAmount =1;
+        // Act
+        String result = am.withdraw(c, overflowwithdrawAmount);
+
+
+        // Assert
+        Assertions.assertEquals("insufficient account balance", result);
+    }
 
     @Test
     void givenCustomerDepositingNegativeAmountToBalanceThenFail(){
