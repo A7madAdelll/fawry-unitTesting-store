@@ -4,6 +4,8 @@ import example.account.AccountManager;
 import example.account.Customer;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+
 import static org.mockito.Mockito.*;
 
 public class StoreV2Test {
@@ -12,11 +14,12 @@ public class StoreV2Test {
     void buyShouldFailIfQuantityIsZero() {
         // Arrange
         AccountManager accountManager = mock(AccountManager.class);
+        Customer customer = mock(Customer.class);
         Store store = new StoreImpl(accountManager);
-        Product egg = new Product();
-        Customer customer = new Customer();
-        egg.setQuantity(0);
-
+//        Product egg = new Product();
+//        egg.setQuantity(0);
+        Product egg = mock(Product.class);
+        when(egg.getQuantity()).thenReturn(0);
 
         // Act
         RuntimeException exception =Assertions.assertThrows(RuntimeException.class,()->{
@@ -26,5 +29,28 @@ public class StoreV2Test {
         // Assert
         Assertions.assertEquals("Product out of stock", exception.getMessage());
     }
+    @Test
+    void buyShouldFailIfWithDrawFail() {
+
+        // Arrange
+        AccountManager accountManager = mock(AccountManager.class);
+        Customer customer = mock(Customer.class);
+
+        when(accountManager.withdraw(customer,100)).thenReturn("insufficient account balance");//mock returning error
+
+        Store store = new StoreImpl(accountManager);
+        Product egg = mock(Product.class);
+        when(egg.getQuantity()).thenReturn(3);
+        when(egg.getPrice()).thenReturn(100);
+
+        // Act
+        Exception exception = Assertions.assertThrows(RuntimeException.class,()->{
+            store.buy(egg,customer);
+        });
+        System.out.println(exception.getMessage());
+        // Assert
+        Assertions.assertEquals("Payment failure: ",exception.getMessage().substring(0,17));
+    }
+
 
 }

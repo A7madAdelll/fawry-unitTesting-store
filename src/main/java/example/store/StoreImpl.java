@@ -18,6 +18,7 @@ public class StoreImpl implements Store {
         }
         String status = accountManager.withdraw(customer, product.getPrice());
         if (!status.equals("success")) {
+
             throw new RuntimeException("Payment failure: " + status);
         }
         product.setQuantity(product.getQuantity() - 1);
