@@ -4,9 +4,12 @@ public class AccountManagerImpl implements AccountManager {
     private static final int MAX_CREDIT = 1000;
     @Override
     public String deposit(Customer customer, int amount) {
+        if(amount>=0){
+            customer.setBalance(customer.getBalance() + amount);
+            return "succeed";
+        }
+        return  "fail";
 
-        customer.setBalance(customer.getBalance() + amount);
-        return "succeed";
     }
 
     @Override
