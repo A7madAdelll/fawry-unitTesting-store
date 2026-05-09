@@ -15,11 +15,10 @@ public class AccountManagerImpl implements AccountManager {
     @Override
     public String withdraw(Customer customer, int amount) {
         int expectedBalance = customer.getBalance() - amount;
-
         if (expectedBalance < 0) {
             if (!customer.isCreditAllowed()) {
                 return "insufficient account balance";
-            } else if (expectedBalance > MAX_CREDIT && !customer.isVip()) {
+            } else if (expectedBalance < -MAX_CREDIT && !customer.isVip()) {
                 return "maximum credit exceeded";
             }
         }

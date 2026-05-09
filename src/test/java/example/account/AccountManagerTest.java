@@ -31,8 +31,9 @@ public class AccountManagerTest {
         // Act
         String result = am.withdraw(c, overflowwithdrawAmount);
 
+
         // Assert
-        Assertions.assertEquals("insufficient account balance", result);
+        Assertions.assertEquals("maximum credit exceeded", result);
     }
 
     @Test
